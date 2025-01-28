@@ -1,0 +1,45 @@
+.modelSC{
+    border: 3px solid black;
+    border-radius: 5px;
+}
+.gruen{
+    color : green;
+}
+.rot{
+    color: red;
+}
+.chk{
+    height: 48px;
+    width: 90px;
+    background-color: rgba(21, 143, 10, 0.7);
+    right: 0px;
+    position: absolute;
+    color: white;
+}
+.chk:hover{
+    background-color: rgba(178, 222, 39, 1);
+}
+.bck{
+   
+    height: 48px;
+    width: 90px;
+    background-color: rgb(59 130 246);
+    color: white;
+    margin-top: 10px;
+}
+.bck:hover{
+    background-color: rgb(37 99 235);
+}
+.bck:last-child{
+    position: absolute;
+    right: 0px;
+}
+.fa{
+    
+    margin-left: 10px;
+    margin-right:  10px;
+    height: 375px;
+}
+.fr{
+    margin-left: 15px;
+}

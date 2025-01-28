@@ -1,0 +1,55 @@
+<button
+    class="bg-blue-500 px-5 py-3 text-base mb-3 font-medium text-white transition duration-200 hover:bg-blue-600 active:bg-blue-700"
+    routerLink="/home">
+    Home
+</button>
+<button class="chk" type="button" (click)="korrektheitPruefen(frage.qid)">
+    Correct
+</button>
+<div class="fa">
+    <p>Frage: {{frage.qid}} | Fragentyp: {{frage.qtyp}} <br></p>
+    <div *ngFor="let qtxt of frage.qtxt">
+        <span *ngIf="qtxt[0] === ' '"> {{qtxt}}</span>
+        <span *ngIf="qtxt[0] !== ' '"> {{qtxt}}</span>
+    </div>
+    <div *ngIf="frage.qtyp === 'sc'">
+        <div class="fr" *ngFor="let antwort of frage.qanswers; index as ok">
+            <span *ngIf="qcor">
+                <span *ngIf="antwort.correct">
+                    <span *ngIf="zeigAktuelleAntwort === frage.qid" class="gruen">
+                        <!-- <input type="radio" (click)="antwort.givenans = !antwort.givenans" checked disabled> -->
+                        {{ok + 1}}<span>)</span> {{antwort.txt}} 
+                    </span>
+                </span>
+                <span *ngIf="!antwort.correct">
+                    <span *ngIf="zeigAktuelleAntwort === frage.qid" class="rot">
+                        <!-- <input type="radio" (click)="aGebAntwort(ok)" disabled> -->
+                        {{ok + 1}}<span>)</span> {{antwort.txt}} 
+                    </span>
+                </span>
+                <span *ngIf="zeigAktuelleAntwort !== frage.qid">
+                    <!-- <input type="radio" (click)="aGebAntwort(ok)" disabled> -->
+                    {{ok + 1}}<span>)</span> {{antwort.txt}} 
+                </span>
+            </span>
+            <span *ngIf="!qcor">
+                <div *ngIf="antwort.givenans">
+                <!-- <input type="radio" name="abc" (click)="aGebAntwort(ok)" checked> -->
+                {{ok + 1}}<span>)</span> {{antwort.txt}}
+                </div>
+                <div *ngIf="!antwort.givenans">
+                    <!-- <input type="radio" (click)="aGebAntwort(ok)"> -->
+                    {{ok + 1}}<span>)</span> {{antwort.txt}}
+                </div>
+            </span>
+        </div>
+    </div>
+</div>
+
+<button class="bck" type="button" (click)="vorherigeFrage()">
+    Back
+</button>
+
+<button class="bck" type="button" (click)="naechsteFrage()">
+    Next
+</button>

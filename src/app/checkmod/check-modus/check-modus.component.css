@@ -1,0 +1,26 @@
+.butt{
+    font-size: 44px;
+    text-align: center;
+    background: rgb(63,94,251);
+    background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+    font-weight: 450;
+    margin-top: 3px;
+    border: 3px solid;
+    display: flex;
+    margin: auto;
+    margin-bottom: 1px;
+    width: 400px;
+    height: 70px;
+    display: grid;
+    border-radius: 10px;
+}
+.butt:hover{
+    background: rgb(131,58,180);
+background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
+}
+.home{
+    background-color: cornflowerblue;
+    border-radius: 3px;
+    border: 3px solid rgb(1, 9, 24);
+    font-size: 20px;
+}
