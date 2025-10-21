@@ -31,14 +31,13 @@ export class FiftCheckComponent {
   ) {
     this.questions = this.qservice.getFiQ()
     this.qservice.initGibAntw()
-
     this.aktuelleFrageNummer = 0
     this.frage = this.questions[this.aktuelleFrageNummer]
-    
     this.stats = this.stat.berStatFi()
     this.gotolearnmode = false
     this.learnwrong = 0
   }
+
   kInput(myinput: string) {
     this.richtigeEingabe = false
     this.frage.qgiventxt = myinput
@@ -50,6 +49,7 @@ export class FiftCheckComponent {
     }
     this.refreshStatsFI()
   }
+
   vorherigeFrage() {
     if (0 < this.aktuelleFrageNummer) {
       this.aktuelleFrageNummer--
@@ -58,16 +58,18 @@ export class FiftCheckComponent {
     this.qcor = false
     this.refreshStatsFI()
   }
+
   naechsteFrage() {
     if (this.CheckFiFrageAnt()) {
       this.gotolearnmode = false
       if (!this.CheckFiFrageRichtig()) {
         this.learnwrong++
-        this.frage.qgiventxt = ''
-        this.vorherigeFrage()
-        this.refreshStatsFI()
         if (this.learnwrong >= this.maxlearnwrong) {
           this.gotolearnmode = true
+        }
+        if (this.aktuelleFrageNummer < this.questions.length - 1) {
+          this.aktuelleFrageNummer++
+          this.frage = this.questions[this.aktuelleFrageNummer]
         }
       } else {
         if (this.aktuelleFrageNummer < this.questions.length - 1) {
@@ -75,7 +77,6 @@ export class FiftCheckComponent {
           this.frage = this.questions[this.aktuelleFrageNummer]
         }
         this.qcor = false
-        this.refreshStatsFI()
       }
     } else {
       if (this.aktuelleFrageNummer < this.questions.length - 1) {
@@ -86,6 +87,7 @@ export class FiftCheckComponent {
       this.refreshStatsFI()
     }
   }
+
   korrektheitPruefen(qid: number): void {
     if (this.zeigAktuelleAntwort != qid) {
       this.zeigAktuelleAntwort = qid;
@@ -96,11 +98,13 @@ export class FiftCheckComponent {
     }
     this.refreshStatsFI()
   }
+
   aGebAntwortFI(ok: number) {
     this.frage.qanswers.map(a => a.givenans = false)
     this.frage.qanswers[ok].givenans = !this.frage.qanswers[ok].givenans
     this.refreshStatsFI()
   }
+
   CheckFiFrageAnt() {
     if (this.frage.qgiventxt != '') {
       return true
@@ -109,6 +113,7 @@ export class FiftCheckComponent {
       return false
     }
   }
+
   CheckFiFrageRichtig() {
     if (this.frage.qanswers.find(q => q.txt.find(a => a === this.frage.qgiventxt))) {
       return true
@@ -117,6 +122,7 @@ export class FiftCheckComponent {
       return false
     }
   }
+
   refreshStatsFI() {
     this.stats = this.stat.berStatFi()
   }

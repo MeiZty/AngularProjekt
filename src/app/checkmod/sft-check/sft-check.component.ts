@@ -11,13 +11,10 @@ import { StatsService } from 'src/app/stats.service';
 })
 export class SftCheckComponent {
   questions: Query[] = []
-
   qcor = false;
   zeigAktuelleAntwort = -1
-
   frage: Query;
   aktuelleFrageNummer = -1
-
   stats: Stats;
   gotolearnmode: boolean
   learnwrong: number
@@ -37,6 +34,7 @@ export class SftCheckComponent {
     this.gotolearnmode = false
     this.learnwrong = 0
   }
+
   vorherigeFrage() {
     if (0 < this.aktuelleFrageNummer) {
       this.aktuelleFrageNummer--
@@ -45,24 +43,27 @@ export class SftCheckComponent {
     this.qcor = false
     this.refreshStatsSC()
   }
+
   naechsteFrage() {
     if (this.CheckSinChFrageAnt()) {
       this.gotolearnmode = false
       if (!this.CheckSinChFrageRichtig()) {
         this.learnwrong++
-        this.frage.qanswers.map(a => a.givenans = false)
-        this.vorherigeFrage()
-        this.refreshStatsSC()
         if (this.learnwrong >= this.maxlearnwrong) {
           this.gotolearnmode = true
         }
-      } else {
         if (this.aktuelleFrageNummer < this.questions.length - 1) {
           this.aktuelleFrageNummer++
           this.frage = this.questions[this.aktuelleFrageNummer]
         }
         this.qcor = false
-        this.refreshStatsSC()
+      } else {
+        this.learnwrong++
+        if (this.aktuelleFrageNummer < this.questions.length - 1) {
+          this.aktuelleFrageNummer++
+          this.frage = this.questions[this.aktuelleFrageNummer]
+        }
+        this.qcor = false
       }
     } else {
       if (this.aktuelleFrageNummer < this.questions.length - 1) {
@@ -73,6 +74,7 @@ export class SftCheckComponent {
       this.refreshStatsSC()
     }
   }
+
   korrektheitPruefen(qid: number): void {
     if (this.zeigAktuelleAntwort != qid) {
       this.zeigAktuelleAntwort = qid;
@@ -83,11 +85,13 @@ export class SftCheckComponent {
     }
     this.refreshStatsSC()
   }
+
   aGebAntwortSC(ok: number) {
     this.frage.qanswers.map(an => an.givenans = false)
     this.frage.qanswers[ok].givenans = !this.frage.qanswers[ok].givenans
     this.refreshStatsSC()
   }
+
   CheckSinChFrageAnt() {
     if (this.frage.qanswers.find(a => a.givenans === true)) {
       return true
@@ -96,6 +100,7 @@ export class SftCheckComponent {
       return false
     }
   }
+
   CheckSinChFrageRichtig() {
     if (this.frage.qanswers.find(a => a.givenans === true && a.givenans === a.correct)) {
       return true
@@ -104,7 +109,8 @@ export class SftCheckComponent {
       return false
     }
   }
-  refreshStatsSC(){
+
+  refreshStatsSC() {
     this.stats = this.stat.berStatSC()
   }
 }

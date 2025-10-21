@@ -19,7 +19,7 @@ export class AftCheckComponent {
   aktuelleFrageNummer = -1
 
   stats: Stats;
-  richtigeEingabe = false //boolean:
+  richtigeEingabe = false
   gotolearnmode: boolean
   learnwrong: number
   maxlearnwrong = 7
@@ -38,6 +38,7 @@ export class AftCheckComponent {
     this.gotolearnmode = false
     this.learnwrong = 0
   }
+
   kInput(myinput: string) {
     this.richtigeEingabe = false
     this.frage.qgiventxt = myinput
@@ -49,6 +50,7 @@ export class AftCheckComponent {
     }
     this.refreshStatsFI()
   }
+
   vorherigeFrage() {
     if (0 < this.aktuelleFrageNummer) {
       this.aktuelleFrageNummer--
@@ -57,25 +59,28 @@ export class AftCheckComponent {
     this.qcor = false
     this.refreshStatsSC()
   }
+
   naechsteFrage() {
     if (this.frage.qtyp === 'sc') {
       if (this.CheckSinChFrageAnt()) {
         this.gotolearnmode = false
         if (!this.CheckSinChFrageRichtig()) {
           this.learnwrong++
-          this.frage.qanswers.map(a => a.givenans = false)
-          this.vorherigeFrage()
-          this.refreshStats()
           if (this.learnwrong >= this.maxlearnwrong) {
             this.gotolearnmode = true
           }
-        } else {
           if (this.aktuelleFrageNummer < this.questions.length - 1) {
             this.aktuelleFrageNummer++
             this.frage = this.questions[this.aktuelleFrageNummer]
           }
           this.qcor = false
-          this.refreshStats()
+        } else {
+          this.learnwrong++
+          if (this.aktuelleFrageNummer < this.questions.length - 1) {
+            this.aktuelleFrageNummer++
+            this.frage = this.questions[this.aktuelleFrageNummer]
+          }
+          this.qcor = false
         }
       } else {
         if (this.aktuelleFrageNummer < this.questions.length - 1) {
@@ -83,20 +88,24 @@ export class AftCheckComponent {
           this.frage = this.questions[this.aktuelleFrageNummer]
         }
         this.qcor = false
-        this.refreshStats()
+        this.refreshStatsSC()
       }
-    }else if(this.frage.qtyp === 'mc'){
+    } else if (this.frage.qtyp === 'mc') {
       if (this.CheckMulChFrageAnt()) {
         this.gotolearnmode = false
         if (!this.CheckMulChFrageRichtig()) {
           this.learnwrong++
-          this.frage.qanswers.map(a => a.givenans = false)
-          this.vorherigeFrage()
-          this.refreshStats()
           if (this.learnwrong >= this.maxlearnwrong) {
             this.gotolearnmode = true
           }
+          if (this.aktuelleFrageNummer < this.questions.length - 1) {
+            this.aktuelleFrageNummer++
+            this.frage = this.questions[this.aktuelleFrageNummer]
+          }
+          this.qcor = false
+          this.refreshStats()
         } else {
+          this.learnwrong++
           if (this.aktuelleFrageNummer < this.questions.length - 1) {
             this.aktuelleFrageNummer++
             this.frage = this.questions[this.aktuelleFrageNummer]
@@ -112,16 +121,17 @@ export class AftCheckComponent {
         this.qcor = false
         this.refreshStats()
       }
-    }else if( this.frage.qtyp === 'fi'){
+    } else if (this.frage.qtyp === 'fi') {
       if (this.CheckFiFrageAnt()) {
         this.gotolearnmode = false
         if (!this.CheckFiFrageRichtig()) {
           this.learnwrong++
-          this.frage.qgiventxt = ''
-          this.vorherigeFrage()
-          this.refreshStats()
           if (this.learnwrong >= this.maxlearnwrong) {
             this.gotolearnmode = true
+          }
+          if (this.aktuelleFrageNummer < this.questions.length - 1) {
+            this.aktuelleFrageNummer++
+            this.frage = this.questions[this.aktuelleFrageNummer]
           }
         } else {
           if (this.aktuelleFrageNummer < this.questions.length - 1) {
@@ -129,7 +139,6 @@ export class AftCheckComponent {
             this.frage = this.questions[this.aktuelleFrageNummer]
           }
           this.qcor = false
-          this.refreshStats()
         }
       } else {
         if (this.aktuelleFrageNummer < this.questions.length - 1) {
@@ -137,10 +146,11 @@ export class AftCheckComponent {
           this.frage = this.questions[this.aktuelleFrageNummer]
         }
         this.qcor = false
-        this.refreshStats()
+        this.refreshStatsFI()
       }
     }
   }
+
   korrektheitPruefen(qid: number): void {
     if (this.zeigAktuelleAntwort != qid) {
       this.zeigAktuelleAntwort = qid;
@@ -152,7 +162,6 @@ export class AftCheckComponent {
     this.refreshStatsSC()
   }
 
-  //Fill in
   CheckFiFrageAnt() {
     if (this.frage.qgiventxt != '') {
       return true
@@ -161,6 +170,7 @@ export class AftCheckComponent {
       return false
     }
   }
+
   CheckFiFrageRichtig() {
     if (this.frage.qanswers.find(q => q.txt.find(a => a === this.frage.qgiventxt))) {
       return true
@@ -169,15 +179,16 @@ export class AftCheckComponent {
       return false
     }
   }
+
   refreshStatsFI() {
     this.stats = this.stat.berStatAll()
   }
 
-  //Multiple Choice
   aGebAntwortMC(ok: number) {
     this.frage.qanswers[ok].givenans = !this.frage.qanswers[ok].givenans
     this.refreshStats()
   }
+
   CheckMulChFrageAnt() {
     if (this.frage.qanswers.find(a => a.givenans === true)) {
       return true
@@ -186,6 +197,7 @@ export class AftCheckComponent {
       return false
     }
   }
+
   CheckMulChFrageRichtig() {
     if (this.frage.qanswers.find(a => a.givenans != a.correct)) {
       return false
@@ -198,12 +210,12 @@ export class AftCheckComponent {
     this.stats = this.stat.berStatAll()
   }
 
-  //single choice
   aGebAntwortSC(ok: number) {
     this.frage.qanswers.map(an => an.givenans = false)
     this.frage.qanswers[ok].givenans = !this.frage.qanswers[ok].givenans
     this.refreshStatsSC()
   }
+
   CheckSinChFrageAnt() {
     if (this.frage.qanswers.find(a => a.givenans === true)) {
       return true
@@ -212,6 +224,7 @@ export class AftCheckComponent {
       return false
     }
   }
+
   CheckSinChFrageRichtig() {
     if (this.frage.qanswers.find(a => a.givenans === true && a.givenans === a.correct)) {
       return true
@@ -220,6 +233,7 @@ export class AftCheckComponent {
       return false
     }
   }
+
   refreshStatsSC() {
     this.stats = this.stat.berStatAll()
   }

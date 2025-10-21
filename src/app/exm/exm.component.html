@@ -1,9 +1,42 @@
-<div *ngIf="!gotolearnmode">
-    <button
-        class="bg-blue-500 px-5 py-3 text-base mb-3 font-medium text-white transition duration-200 hover:bg-blue-600 active:bg-blue-700"
-        routerLink="/home">
-        Home
-    </button>
+<div *ngIf="gotolearnmode" class="fullscreen-center">
+    <div class="error-box">
+        <h1>Oops, zu viele Fehler!</h1>
+        <p>Du hast das Limit von {{maxlearnwrong}} Fehlern erreicht. Nimm dir etwas mehr Zeit, um dich vorzubereiten.</p>
+        <h3>Das ist deine Statistik</h3>
+         <div class="container1">
+            <div class="stat-row">
+                <span class="stat-label">Query number:</span>
+                <span class="stat-value">{{stats.mnum}}</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">No Answered:</span>
+                <span class="stat-value">{{stats.nixbeant}}</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Answered:</span>
+                <span class="stat-value">{{stats.ansd}}</span>
+            </div>
+            <div class="stat-row highlight-correct">
+                <span class="stat-label">Correct:</span>
+                <span class="stat-value">{{stats.richtig}}</span>
+            </div>
+            <div class="stat-row highlight-wrong">
+                <span class="stat-label">Wrong:</span>
+                <span class="stat-value">{{stats.falsch}}</span>
+            </div>
+        </div>
+        <button class="butt home-butt-error" routerLink="/home">
+            Zurück zur Startseite
+        </button>
+    </div>
+</div>
+<body *ngIf="!gotolearnmode">
+    <div class="container">
+        <div class="header-buttons">
+            <button class="butt home-butt" routerLink="/home">
+                Home
+            </button>
+        </div>
     <div class="fa">
         <p>Frage: {{frage.qid}} | Fragentyp: {{frage.qtyp}} <br></p>
         <div *ngFor="let qtxt of frage.qtxt">
@@ -109,33 +142,13 @@
             </div>
         </div>
     </div>
-    <button class="bck" type="button" (click)="vorherigeFrage()">
-        Back
-    </button>
-    <button class="nxt" type="button" (click)="naechsteFrage()">
-        Next
-    </button>
-    <!-- <div>
-        Query_Number:{{stats.mnum}} <br>
-        Answered:{{stats.ansd}} <br>
-        No_answered:{{stats.nixbeant}} <br>
-        Wrong:{{stats.falsch}} <br>
-        Correct:{{stats.richtig}} <br>
-    </div> -->
-</div>
-
-<div *ngIf="gotolearnmode">
-    <button
-        class="bg-blue-500 px-5 py-3 text-base mb-3 font-medium text-white transition duration-200 hover:bg-blue-600 active:bg-blue-700"
-        routerLink="/home">
-        Home
-    </button>
-    <h1>Sie haben leider Exam nicht Bestanden</h1>
-    <div>
-        Query_Number:{{stats.mnum}} <br>
-        Answered:{{stats.ansd}} <br>
-        No_answered:{{stats.nixbeant}} <br>
-        Wrong:{{stats.falsch}} <br>
-        Correct:{{stats.richtig}} <br>
+        <div class="footer-buttons">
+            <button class="butt nav-butt" type="button" (click)="vorherigeFrage()">
+                Back
+            </button>
+            <button class="butt nav-butt" type="button" (click)="naechsteFrage()">
+                Next
+            </button>
+        </div>
     </div>
-</div>
+</body>

@@ -12,11 +12,6 @@ import { Stats } from '../Interface.s';
 export class CheckSComponent {
   SC : Query[] = []
   SCfound: Query[] = []
-
-  // frAnzahl : number = -1;
-  // frCheckFalsch: number = -1;
-  // frAntete : boolean = false;
-
   statss : Stats;
 
   constructor(

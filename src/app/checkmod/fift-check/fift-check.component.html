@@ -1,64 +1,87 @@
-<button
-    class="bg-blue-500 px-5 py-3 text-base mb-3 font-medium text-white transition duration-200 hover:bg-blue-600 active:bg-blue-700"
-    routerLink="/home">
-    Home
-</button>
-<button class="chk" type="button" (click)="korrektheitPruefen(frage.qid)">
-    Correct
-</button>
-<div *ngIf="frage.qtyp ==='fi'" class="fa">
-    <p>Frage: {{frage.qid}} | Fragentyp: {{frage.qtyp}} <br></p>
-    <div *ngFor="let qtxt of frage.qtxt">
-        <span *ngIf="qtxt[0] === ' '"> {{qtxt}}</span>
-        <span *ngIf="qtxt[0] !== ' '"> {{qtxt}}</span>
+<div *ngIf="gotolearnmode" class="fullscreen-center">
+    <div class="error-box">
+        <h1>Oops, zu viele Fehler!</h1>
+        <p>Du hast das Limit von {{maxlearnwrong}} Fehlern erreicht. Nimm dir etwas mehr Zeit, um dich vorzubereiten.
+        </p>
+        <button class="butt home-butt-error" routerLink="/home">
+            Zurück zur Startseite
+        </button>
     </div>
-    <div class="fr" *ngFor="let antwort of frage.qanswers; index as ok">
-        <span *ngIf="qcor">
-            <span *ngIf="zeigAktuelleAntwort === frage.qid" class="gruen">
-                {{ok + 1}} : {{antwort.txt}}
-            </span>
-            <span *ngIf="zeigAktuelleAntwort !== frage.qid">
-                {{ok + 1}}:
-                <input type="text" value="{{antwort.txt}}">
-            </span>
-        </span>
-        <div>
-            <span *ngIf="richtigeEingabe">
-                <span *ngIf="!qcor">
-                    {{ok + 1}}:
-                    <input type="text" #myinput (keyup)="kInput(myinput.value)" value="{{ frage.qgiventxt}}"
-                        llceaeAutoFocusInput (keyup.enter)="naechsteFrage()">
+</div>
+
+<body *ngIf="!gotolearnmode">
+    <div class="container">
+        <div class="header-buttons">
+            <button class="butt home-butt" routerLink="/home">
+                Home
+            </button>
+            <button class="butt chk-butt" type="button" (click)="korrektheitPruefen(frage.qid)">
+                Correct
+            </button>
+        </div>
+        <div *ngIf="frage.qtyp ==='fi'" class="fa">
+            <p>Frage: {{frage.qid}} | Fragentyp: {{frage.qtyp}} <br></p>
+            <div *ngFor="let qtxt of frage.qtxt">
+                <span *ngIf="qtxt[0] === ' '"> {{qtxt}}</span>
+                <span *ngIf="qtxt[0] !== ' '"> {{qtxt}}</span>
+            </div>
+            <div class="fr" *ngFor="let antwort of frage.qanswers; index as ok">
+                <span *ngIf="qcor">
+                    <span *ngIf="zeigAktuelleAntwort === frage.qid" class="gruen">
+                        {{ok + 1}} : {{antwort.txt}}
+                    </span>
+                    <span *ngIf="zeigAktuelleAntwort !== frage.qid">
+                        {{ok + 1}}:
+                        <input type="text" value="{{antwort.txt}}">
+                    </span>
                 </span>
-            </span>
-            <span *ngIf="!richtigeEingabe">
-                <span *ngIf="!qcor">
-                    {{ok + 1}}:
-                    <input type="text" #myinput (keyup)="kInput(myinput.value)" value="{{ frage.qgiventxt}}"
-                        llceaeAutoFocusInput (keyup.enter)="naechsteFrage()">
-                </span>
-            </span>
+                <div>
+                    <span *ngIf="richtigeEingabe">
+                        <span *ngIf="!qcor">
+                            {{ok + 1}}:
+                            <input type="text" #myinput (keyup)="kInput(myinput.value)" value="{{ frage.qgiventxt}}"
+                                llceaeAutoFocusInput (keyup.enter)="naechsteFrage()">
+                        </span>
+                    </span>
+                    <span *ngIf="!richtigeEingabe">
+                        <span *ngIf="!qcor">
+                            {{ok + 1}}:
+                            <input type="text" #myinput (keyup)="kInput(myinput.value)" value="{{ frage.qgiventxt}}"
+                                llceaeAutoFocusInput (keyup.enter)="naechsteFrage()">
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="footer-buttons">
+            <button class="butt nav-butt" type="button" (click)="vorherigeFrage()">
+                Back
+            </button>
+            <button class="butt nav-butt" type="button" (click)="naechsteFrage()">
+                Next
+            </button>
+        </div>
+        <div class="container1">
+            <div class="stat-row">
+                <span class="stat-label">Query number:</span>
+                <span class="stat-value">{{stats.mnum}}</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">No Answered:</span>
+                <span class="stat-value">{{stats.nixbeant}}</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Answered:</span>
+                <span class="stat-value">{{stats.ansd}}</span>
+            </div>
+            <div class="stat-row highlight-correct">
+                <span class="stat-label">Correct:</span>
+                <span class="stat-value">{{stats.richtig}}</span>
+            </div>
+            <div class="stat-row highlight-wrong">
+                <span class="stat-label">Wrong:</span>
+                <span class="stat-value">{{stats.falsch}}</span>
+            </div>
         </div>
     </div>
-</div>
-<button class="bck" type="button" (click)="vorherigeFrage()">
-    Back
-</button>
-<button class="nxt" type="button" (click)="naechsteFrage()">
-    Next
-</button>
-
-<div>
-    Query_Number:{{stats.mnum}} <br>
-    Answered:{{stats.ansd}} <br>
-    No_answered:{{stats.nixbeant}} <br>
-    Wrong:{{stats.falsch}} <br>
-    Correct:{{stats.richtig}} <br>
-</div>
-<div *ngIf="gotolearnmode">
-    <button
-        class="bg-blue-500 px-5 py-3 text-base mb-3 font-medium text-white transition duration-200 hover:bg-blue-600 active:bg-blue-700"
-        routerLink="/home">
-        Home
-    </button>
-    <h1>Oops so geht es nicht, zu viel Fehler | Nimm noch ein bisschen mehr Zeit um sich zu vorbereiten</h1>
-</div>
+</body>

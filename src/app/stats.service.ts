@@ -12,15 +12,12 @@ export class StatsService {
   All_fragen: Query[] = []
   MC_fragen: Query[] = []
   Fi_fragen: Query[] = []
-
   frGef: llceFrage[] = []
   antete: llceFrage[] = []
   antwFalsch: llceFrage[] = []
-
   frAnzahl = -1;
   frCheckFalsch = -1;
   frAntete = false;
-
   stats: Stats;
 
   constructor(private qserv: QserviceService) {
@@ -38,6 +35,7 @@ export class StatsService {
 
     }
   }
+
   nullStats() {
     this.stats.mnum = 0;
     this.stats.ansd = 0;
@@ -45,40 +43,40 @@ export class StatsService {
     this.stats.richtig = 0;
     this.stats.nixbeant = 0;
   }
+
   zurSetzMC() {
     this.nullStats()
     return this.berStatMC();
   }
+
   zurSetzSC() {
     this.nullStats()
     return this.berStatSC
   }
+
   zurSetzFI() {
     this.nullStats()
     return this.berStatFi
   }
+
   zurSetzAll() {
     this.nullStats()
     return this.berStatAll
   }
 
-
   berStatMC() {
     this.stats.mnum = this.MC_fragen.length
-    if (this.MC_fragen.findIndex(f => f.qanswers.findIndex(a => a.givenans === true)) > 0) {
-      this.stats.ansd = this.MC_fragen.filter(f => f.qanswers.findIndex(a => a.givenans === true) != -1).length
-    }
+    this.stats.ansd = 0;
+    this.stats.ansd = this.MC_fragen.filter(f => f.qanswers.some(a => a.givenans === true)).length
     this.stats.nixbeant = this.stats.mnum - this.stats.ansd;
-
     this.stats.falsch = this.MC_fragen
-      .filter(f => f.qanswers
-        .findIndex(a => a.givenans === true) > -1)
-      .filter(f => f.qanswers
-        .findIndex(a => a.correct != a.givenans) > -1).length
+      .filter(f => f.qanswers.some(a => a.givenans === true))
+      .filter(f => f.qanswers.some(a => a.givenans !== a.correct))
+      .length
     this.stats.richtig = this.stats.ansd - this.stats.falsch
-    this.stats.falsch = this.antwFalsch.length
     return this.stats;
   }
+
   berStatSC() {
     this.stats.mnum = this.SC_fragen.length
     if (this.SC_fragen.findIndex(f => f.qanswers.findIndex(a => a.givenans === true)) > -1) {
@@ -94,6 +92,7 @@ export class StatsService {
     this.stats.richtig = this.stats.ansd - this.stats.falsch
     return this.stats;
   }
+
   berStatFi() {
     this.stats.mnum = this.Fi_fragen.length
 
@@ -106,45 +105,46 @@ export class StatsService {
         t => t === f.qgiventxt))).length
 
     this.stats.falsch = this.stats.ansd - this.stats.richtig
+
     return this.stats;
   }
+
   berStatAll() {
     this.stats.mnum = this.All_fragen.length
 
-    let mcs =
-      this.All_fragen.filter(q => q.qtyp === 'mc').
-        filter(q => q.qanswers.findIndex(a => a.givenans === true) > -1).length
+    let mcs_ansd =
+      this.All_fragen.filter(q => q.qtyp === 'mc')
+                     .filter(q => q.qanswers.some(a => a.givenans === true)).length
 
-    let scs =
+    let scs_ansd =
       this.All_fragen.filter(q => q.qtyp === 'sc')
-        .filter(q => q.qanswers.findIndex(a => a.givenans === true) > -1).length
+                     .filter(q => q.qanswers.some(a => a.givenans === true)).length
 
-    let fis =
-      this.All_fragen.filter(q => q.qtyp === 'fi').filter(q => q.qgiventxt != '').length
+    let fis_ansd =
+      this.All_fragen.filter(q => q.qtyp === 'fi')
+                     .filter(q => q.qgiventxt != '').length
 
-    this.stats.ansd = mcs + scs + fis
-    console.log(mcs, scs, fis)
+    this.stats.ansd = mcs_ansd + scs_ansd + fis_ansd
 
-    // // not answered
-    this.stats.nixbeant = this.stats.mnum - mcs - scs - fis
+    let falsch_mcs = this.All_fragen.filter(q => q.qtyp === 'mc')
+      .filter(q => q.qanswers.some(a => a.givenans === true) && q.qanswers
+      .some(a => a.correct != a.givenans)).length
 
-    // // correct answered
-    // mcs not correct
-    let notcorrectmcs = this.All_fragen.filter(q => q.qtyp === 'mc')
-      .filter(q => q.qanswers.findIndex(a => a.correct != a.givenans) > -1).length
-    console.log('mcs n c:', notcorrectmcs)
-    // scs not correct
-    let notcorrectscs = this.All_fragen.filter(q => q.qtyp === 'sc')
-      .filter(q => q.qanswers.findIndex(a => a.correct != a.givenans) > -1).length
-    console.log('scs n c:', notcorrectscs)
-    // fis not correct
-    let notcorrectfis = this.All_fragen.filter(q => q.qtyp === 'fi')
-      .filter(q => q.qanswers.findIndex(a => a.txt.find(t => t === q.qgiventxt))).length
-    console.log('fis n c:', notcorrectfis)
+    let falsch_scs = this.All_fragen.filter(q => q.qtyp === 'sc')
+      .filter(q => q.qanswers.some(a => a.givenans === true) && q.qanswers
+      .some(a => a.correct != a.givenans)).length
 
-    this.stats.richtig = this.stats.mnum - notcorrectmcs - notcorrectscs - notcorrectfis
-    // // wrong answered
-    this.stats.falsch = this.stats.nixbeant - (notcorrectmcs + notcorrectscs + notcorrectfis)
+    let falsch_fis = this.All_fragen.filter(q => q.qtyp === 'fi')
+      .filter(q => {
+        return q.qgiventxt && q.qgiventxt !== '' && !q.qanswers
+        .some(a => a.txt.includes(q.qgiventxt!));
+      }).length
+
+    this.stats.falsch = falsch_mcs + falsch_scs + falsch_fis
+
+    this.stats.richtig = this.stats.ansd - this.stats.falsch
+
+    this.stats.nixbeant = this.stats.mnum - this.stats.ansd
 
     return this.stats;
   }

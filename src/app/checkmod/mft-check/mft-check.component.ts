@@ -11,13 +11,10 @@ import { StatsService } from 'src/app/stats.service';
 })
 export class MftCheckComponent {
   questions: Query[] = []
-
   qcor = false;
   zeigAktuelleAntwort = -1
-
   frage: Query;
   aktuelleFrageNummer = -1
-
   stats: Stats;
   gotolearnmode: boolean
   learnwrong: number
@@ -37,6 +34,7 @@ export class MftCheckComponent {
     this.gotolearnmode = false
     this.learnwrong = 0
   }
+
   vorherigeFrage() {
     if (0 < this.aktuelleFrageNummer) {
       this.aktuelleFrageNummer--
@@ -45,18 +43,23 @@ export class MftCheckComponent {
     this.qcor = false
     this.refreshStats()
   }
+
   naechsteFrage() {
     if (this.CheckMulChFrageAnt()) {
       this.gotolearnmode = false
       if (!this.CheckMulChFrageRichtig()) {
         this.learnwrong++
-        this.frage.qanswers.map(a => a.givenans = false)
-        this.vorherigeFrage()
-        this.refreshStats()
         if (this.learnwrong >= this.maxlearnwrong) {
           this.gotolearnmode = true
         }
+        if (this.aktuelleFrageNummer < this.questions.length - 1) {
+          this.aktuelleFrageNummer++
+          this.frage = this.questions[this.aktuelleFrageNummer]
+        }
+        this.qcor = false
+        this.refreshStats()
       } else {
+        this.learnwrong++
         if (this.aktuelleFrageNummer < this.questions.length - 1) {
           this.aktuelleFrageNummer++
           this.frage = this.questions[this.aktuelleFrageNummer]
@@ -73,6 +76,7 @@ export class MftCheckComponent {
       this.refreshStats()
     }
   }
+
   korrektheitPruefen(qid: number): void {
     if (this.zeigAktuelleAntwort != qid) {
       this.zeigAktuelleAntwort = qid;
@@ -83,10 +87,12 @@ export class MftCheckComponent {
     }
     this.refreshStats()
   }
+
   aGebAntwortMC(ok: number) {
     this.frage.qanswers[ok].givenans = !this.frage.qanswers[ok].givenans
     this.refreshStats()
   }
+
   CheckMulChFrageAnt() {
     if (this.frage.qanswers.find(a => a.givenans === true)) {
       return true
@@ -95,16 +101,12 @@ export class MftCheckComponent {
       return false
     }
   }
+
   CheckMulChFrageRichtig() {
-    if (this.frage.qanswers.find(a => a.givenans != a.correct)) {
-      return false
-    }
-    else {
-      return true
-    }
+    return !this.frage.qanswers.some(a => a.givenans !== a.correct);
   }
-  refreshStats(){
+
+  refreshStats() {
     this.stats = this.stat.berStatMC()
   }
 }
-
