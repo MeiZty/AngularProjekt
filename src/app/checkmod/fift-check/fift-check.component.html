@@ -19,7 +19,7 @@
                 Correct
             </button>
         </div>
-        <div *ngIf="frage.qtyp ==='fi'" class="fa">
+        <div *ngIf="frage.qtyp ==='fi'" class="fa question-area">
             <p>Frage: {{frage.qid}} | Fragentyp: {{frage.qtyp}} <br></p>
             <div *ngFor="let qtxt of frage.qtxt">
                 <span *ngIf="qtxt[0] === ' '"> {{qtxt}}</span>

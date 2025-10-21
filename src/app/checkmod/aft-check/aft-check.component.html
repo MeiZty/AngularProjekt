@@ -19,7 +19,7 @@
                 Correct
             </button>
         </div>
-        <div class="fa">
+        <div class="fa question-area">
             <p>Frage: {{frage.qid}} | Fragentyp: {{frage.qtyp}} <br></p>
             <div *ngFor="let qtxt of frage.qtxt">
                 <span *ngIf="qtxt[0] === ' '"> {{qtxt}}</span>
@@ -90,11 +90,11 @@
                 </div>
             </div>
             <div *ngIf="frage.qtyp ==='fi'" class="fa">
-                <p>Frage: {{frage.qid}} | Fragentyp: {{frage.qtyp}} <br></p>
-                <div *ngFor="let qtxt of frage.qtxt">
+                <!-- <p>Frage: {{frage.qid}} | Fragentyp: {{frage.qtyp}} <br></p> -->
+                <!-- <div *ngFor="let qtxt of frage.qtxt">
                     <span *ngIf="qtxt[0] === ' '"> {{qtxt}}</span>
                     <span *ngIf="qtxt[0] !== ' '"> {{qtxt}}</span>
-                </div>
+                </div> -->
                 <div class="fr" *ngFor="let antwort of frage.qanswers; index as ok">
                     <span *ngIf="qcor">
                         <span *ngIf="zeigAktuelleAntwort === frage.qid" class="gruen">

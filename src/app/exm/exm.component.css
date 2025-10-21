@@ -78,12 +78,7 @@ body {
     box-shadow: 0 8px 30px 0 rgba(100, 80, 200, 0.2);
     transform: translateY(-1px);
 }
-.gruen{
-    color : rgb(3, 129, 3);
-}
-.rot{
-    color: rgb(238, 95, 95);
-}
+
 .container1 {
     padding: 1rem 2rem;
     max-width: 250px; 
