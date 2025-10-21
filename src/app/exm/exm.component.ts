@@ -5,9 +5,10 @@ import { QserviceService } from '../qservice.service';
 import { StatsService } from '../stats.service';
 
 @Component({
-  selector: 'bm-exm',
-  templateUrl: './exm.component.html',
-  styleUrls: ['./exm.component.css']
+    selector: 'bm-exm',
+    templateUrl: './exm.component.html',
+    styleUrls: ['./exm.component.css'],
+    standalone: false
 })
 export class ExmComponent {
   questions: Query[] = []

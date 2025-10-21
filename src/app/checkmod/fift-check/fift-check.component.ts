@@ -6,9 +6,10 @@ import { QserviceService } from 'src/app/qservice.service';
 import { StatsService } from 'src/app/stats.service';
 
 @Component({
-  selector: 'bm-fift-check',
-  templateUrl: './fift-check.component.html',
-  styleUrls: ['./fift-check.component.css']
+    selector: 'bm-fift-check',
+    templateUrl: './fift-check.component.html',
+    styleUrls: ['./fift-check.component.css'],
+    standalone: false
 })
 export class FiftCheckComponent {
   questions: Query[] = []

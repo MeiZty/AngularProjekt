@@ -4,9 +4,10 @@ import { QserviceService } from '../../qservice.service';
 import { StatsService } from '../../stats.service';
 
 @Component({
-  selector: 'bm-mft',
-  templateUrl: './mft.component.html',
-  styleUrls: ['./mft.component.css']
+    selector: 'bm-mft',
+    templateUrl: './mft.component.html',
+    styleUrls: ['./mft.component.css'],
+    standalone: false
 })
 export class MftComponent {
   questions: Query[] = []

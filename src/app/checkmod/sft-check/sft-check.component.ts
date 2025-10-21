@@ -5,9 +5,10 @@ import { QserviceService } from 'src/app/qservice.service';
 import { StatsService } from 'src/app/stats.service';
 
 @Component({
-  selector: 'bm-sft-check',
-  templateUrl: './sft-check.component.html',
-  styleUrls: ['./sft-check.component.css']
+    selector: 'bm-sft-check',
+    templateUrl: './sft-check.component.html',
+    styleUrls: ['./sft-check.component.css'],
+    standalone: false
 })
 export class SftCheckComponent {
   questions: Query[] = []

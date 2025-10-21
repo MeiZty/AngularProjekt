@@ -5,9 +5,10 @@ import { QserviceService } from 'src/app/qservice.service';
 import { StatsService } from 'src/app/stats.service';
 
 @Component({
-  selector: 'bm-mft-check',
-  templateUrl: './mft-check.component.html',
-  styleUrls: ['./mft-check.component.css']
+    selector: 'bm-mft-check',
+    templateUrl: './mft-check.component.html',
+    styleUrls: ['./mft-check.component.css'],
+    standalone: false
 })
 export class MftCheckComponent {
   questions: Query[] = []

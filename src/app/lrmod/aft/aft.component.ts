@@ -3,9 +3,10 @@ import { Query } from '../../Interfaces/Interface.q';
 import { QserviceService } from '../../qservice.service';
 import { StatsService } from '../../stats.service';
 @Component({
-  selector: 'bm-aft',
-  templateUrl: './aft.component.html',
-  styleUrls: ['./aft.component.css']
+    selector: 'bm-aft',
+    templateUrl: './aft.component.html',
+    styleUrls: ['./aft.component.css'],
+    standalone: false
 })
 export class AftComponent {
   questions: Query[] = []

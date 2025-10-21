@@ -4,9 +4,10 @@ import { Query } from '../../Interfaces/Interface.q';
 import { StatsService } from '../../stats.service';
 
 @Component({
-  selector: 'bm-fift',
-  templateUrl: './fift.component.html',
-  styleUrls: ['./fift.component.css']
+    selector: 'bm-fift',
+    templateUrl: './fift.component.html',
+    styleUrls: ['./fift.component.css'],
+    standalone: false
 })
 export class FiftComponent {
   questions: Query[] = []

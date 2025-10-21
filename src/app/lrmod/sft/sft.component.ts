@@ -5,9 +5,10 @@ import { QserviceService } from '../../qservice.service';
 import { StatsService } from '../../stats.service';
 
 @Component({
-  selector: 'bm-sft',
-  templateUrl: './sft.component.html',
-  styleUrls: ['./sft.component.css']
+    selector: 'bm-sft',
+    templateUrl: './sft.component.html',
+    styleUrls: ['./sft.component.css'],
+    standalone: false
 })
 export class SftComponent {
   questions: Query[] = []
